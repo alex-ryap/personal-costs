@@ -82,6 +82,7 @@ export default {
     },
   },
   created() {
+    this.currentPage = Number(this.$route.params.page) || 1;
     this.fetchData(this.currentPage).then(() => {
       this.paymentsList = this.getPaymentsList;
     });

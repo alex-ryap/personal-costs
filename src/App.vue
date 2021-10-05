@@ -5,33 +5,21 @@
         <nav>
           <ul class="nav">
             <li class="nav__item">
-              <!-- HASH transition -->
-              <!-- <a class="nav__link" href="dashboard">Dashboard</a> -->
-
-              <!-- PATH transition -->
-              <a class="nav__link" href="dashboard">Dashboard</a>
+              <router-link class="nav__link" to="/dashboard"
+                >Dashboard</router-link
+              >
             </li>
             <li class="nav__item">
-              <!-- HASH transition -->
-              <!-- <a class="nav__link" href="about">About</a> -->
-
-              <!-- PATH transition -->
-              <a class="nav__link" href="about">About</a>
+              <router-link class="nav__link" to="/about">About</router-link>
             </li>
             <li class="nav__item">
-              <!-- HASH transition -->
-              <!-- <a class="nav__link" href="notfound">Not Found</a> -->
-
-              <!-- PATH transition -->
-              <a class="nav__link" href="notfound">Not Found</a>
+              <router-link class="nav__link" to="/404">Not Found</router-link>
             </li>
           </ul>
         </nav>
       </header>
       <main>
-        <Dashboard v-if="page === 'dashboard'" />
-        <About v-if="page === 'about'" />
-        <NotFound v-if="page === 'notfound'" />
+        <router-view />
       </main>
     </div>
   </div>
@@ -39,46 +27,13 @@
 
 <script>
 import './assets/reset.scss';
-import Dashboard from './views/Dashboard.vue';
-import About from './views/About.vue';
-import NotFound from './views/NotFound.vue';
 
 export default {
   name: 'App',
-  components: {
-    Dashboard,
-    About,
-    NotFound,
-  },
-  data: () => ({
-    page: 'dashboard',
-  }),
-  methods: {
-    setPage() {
-      // HASH transition
-      // this.page = location.hash.slice(1);
-
-      // PATH transition
-      this.page = location.pathname.slice(1);
-    },
-  },
-  mounted() {
-    const links = document.querySelectorAll('a');
-    links.forEach((link) => {
-      link.addEventListener('click', (event) => {
-        event.preventDefault();
-        history.pushState({}, '', link.href);
-        this.setPage();
-      });
-    });
-    this.setPage();
-
-    // HASH transition
-    // window.addEventListener('hashchange', this.setPage);
-
-    // PATH transition
-    window.addEventListener('popstate', this.setPage);
-  },
+  components: {},
+  data: () => ({}),
+  methods: {},
+  mounted() {},
 };
 </script>
 

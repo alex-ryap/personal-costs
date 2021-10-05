@@ -70,6 +70,11 @@ export default {
       this.fetchCategories();
     }
   },
+  created() {
+    this.category = this.$route.params.category || this.category;
+    this.amount = this.$route.query.value || this.amount;
+    this.date = this.getCurrentDate;
+  },
 };
 </script>
 
