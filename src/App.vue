@@ -2,95 +2,82 @@
   <div id="app">
     <div class="container">
       <header>
-        <h1 class="title">My personal costs</h1>
+        <nav>
+          <ul class="nav">
+            <li class="nav__item">
+              <!-- HASH transition -->
+              <!-- <a class="nav__link" href="dashboard">Dashboard</a> -->
+
+              <!-- PATH transition -->
+              <a class="nav__link" href="dashboard">Dashboard</a>
+            </li>
+            <li class="nav__item">
+              <!-- HASH transition -->
+              <!-- <a class="nav__link" href="about">About</a> -->
+
+              <!-- PATH transition -->
+              <a class="nav__link" href="about">About</a>
+            </li>
+            <li class="nav__item">
+              <!-- HASH transition -->
+              <!-- <a class="nav__link" href="notfound">Not Found</a> -->
+
+              <!-- PATH transition -->
+              <a class="nav__link" href="notfound">Not Found</a>
+            </li>
+          </ul>
+        </nav>
       </header>
       <main>
-        <div class="content">
-          <div class="buttons">
-            <button
-              class="btn content__btn"
-              @click="showPaymentForm = !showPaymentForm"
-            >
-              Add new cost
-            </button>
-            <button
-              class="btn content__btn"
-              @click="showCategoryForm = !showCategoryForm"
-            >
-              Add new category
-            </button>
-          </div>
-          <div class="forms">
-            <AddPaymentForm v-if="showPaymentForm" />
-            <AddCategoryForm v-if="showCategoryForm" />
-          </div>
-          Total payments: {{ totalPayments }}
-          <PaymentDisplay :items="paymentsList" />
-          <Pagination
-            :pagesCount="pagesCount"
-            :curPage="currentPage"
-            :count="paymentsCountOfPage"
-            @paginate="setPage"
-          />
-        </div>
+        <Dashboard v-if="page === 'dashboard'" />
+        <About v-if="page === 'about'" />
+        <NotFound v-if="page === 'notfound'" />
       </main>
     </div>
   </div>
 </template>
 
 <script>
-import AddPaymentForm from './components/AddPaymentForm.vue';
-import AddCategoryForm from './components/AddCategoryForm.vue';
-import PaymentDisplay from './components/PaymentDisplay.vue';
-import Pagination from './components/Pagination.vue';
-import { mapMutations, mapGetters, mapActions } from 'vuex';
+import './assets/reset.scss';
+import Dashboard from './views/Dashboard.vue';
+import About from './views/About.vue';
+import NotFound from './views/NotFound.vue';
 
 export default {
   name: 'App',
   components: {
-    AddPaymentForm,
-    AddCategoryForm,
-    PaymentDisplay,
-    Pagination,
+    Dashboard,
+    About,
+    NotFound,
   },
   data: () => ({
-    paymentsList: [],
-    showPaymentForm: false,
-    showCategoryForm: false,
-    currentPage: 1,
-    paymentsCountOfPage: 10,
+    page: 'dashboard',
   }),
-  computed: {
-    ...mapGetters({
-      totalPayments: 'getFullPaymentsValue',
-      getPaymentsList: 'getPaymentsList',
-      pagesCount: 'getPagesCount',
-    }),
-    displayedPayments() {
-      return this.paymentsList.slice(
-        this.currentPage * this.paymentsCountOfPage - this.paymentsCountOfPage,
-        this.currentPage * this.paymentsCountOfPage
-      );
-    },
-  },
   methods: {
-    ...mapMutations({
-      loadPayments: 'setPaymentsList',
-    }),
+    setPage() {
+      // HASH transition
+      // this.page = location.hash.slice(1);
 
-    ...mapActions(['fetchData']),
-
-    setPage(page) {
-      this.currentPage = page;
-      this.fetchData(this.currentPage).then(() => {
-        this.paymentsList = this.getPaymentsList;
-      });
+      // PATH transition
+      this.page = location.pathname.slice(1);
     },
   },
-  created() {
-    this.fetchData(this.currentPage).then(() => {
-      this.paymentsList = this.getPaymentsList;
+  mounted() {
+    const links = document.querySelectorAll('a');
+    links.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        history.pushState({}, '', link.href);
+        this.setPage();
+      });
     });
+    this.setPage();
+
+    // HASH transition
+    // window.addEventListener('hashchange', this.setPage);
+
+    // PATH transition
+    window.addEventListener('popstate', this.setPage);
   },
 };
 </script>
@@ -101,48 +88,31 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 .container {
   padding: 0 50px;
-  width: 100%;
 }
 
-.title {
-  text-align: center;
-}
-
-.content {
+.nav {
+  list-style-type: none;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+  justify-content: space-around;
+  background-color: #2c3e50;
+  padding: 20px;
+  border-radius: 0 0 20px 20px;
 
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  width: 400px;
-}
+  &__link {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px;
+    font-weight: 600;
 
-.btn {
-  cursor: pointer;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  background-color: teal;
-  opacity: 0.8;
-  font-size: 16px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.btn:hover {
-  opacity: 1;
-}
-
-.content__btn {
-  margin-bottom: 15px;
+    &:hover {
+      border-radius: 15px;
+      background-color: #fff;
+      color: #2c3e50;
+    }
+  }
 }
 </style>
