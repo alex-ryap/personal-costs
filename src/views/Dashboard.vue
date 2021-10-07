@@ -3,29 +3,19 @@
     <h1 class="title">My personal costs</h1>
     <div class="content">
       <div class="buttons">
-        <button
-          class="btn content__btn"
-          @click="showPaymentForm = !showPaymentForm"
-        >
+        <button class="btn content__btn" @click="addPayment">
           Add new cost
         </button>
-        <button
-          class="btn content__btn"
-          @click="showCategoryForm = !showCategoryForm"
-        >
+        <button class="btn content__btn" @click="addCategory">
           Add new category
         </button>
       </div>
-      <div class="forms">
-        <AddPaymentForm v-if="showPaymentForm" />
-        <AddCategoryForm v-if="showCategoryForm" />
-      </div>
       Total payments: {{ totalPayments }}
-      <PaymentDisplay :items="paymentsList" />
+      <PaymentDisplay :items="displayedPayments" />
       <Pagination
-        :pagesCount="pagesCount"
         :curPage="currentPage"
         :count="paymentsCountOfPage"
+        :itemsCount="paymentsList.length"
         @paginate="setPage"
       />
     </div>
@@ -33,8 +23,6 @@
 </template>
 
 <script>
-import AddPaymentForm from './../components/AddPaymentForm.vue';
-import AddCategoryForm from './../components/AddCategoryForm.vue';
 import PaymentDisplay from './../components/PaymentDisplay.vue';
 import Pagination from './../components/Pagination.vue';
 import { mapMutations, mapGetters, mapActions } from 'vuex';
@@ -42,15 +30,11 @@ import { mapMutations, mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Dashboard',
   components: {
-    AddPaymentForm,
-    AddCategoryForm,
     PaymentDisplay,
     Pagination,
   },
   data: () => ({
     paymentsList: [],
-    showPaymentForm: false,
-    showCategoryForm: false,
     currentPage: 1,
     paymentsCountOfPage: 10,
   }),
@@ -58,7 +42,6 @@ export default {
     ...mapGetters({
       totalPayments: 'getFullPaymentsValue',
       getPaymentsList: 'getPaymentsList',
-      pagesCount: 'getPagesCount',
     }),
     displayedPayments() {
       return this.paymentsList.slice(
@@ -76,14 +59,25 @@ export default {
 
     setPage(page) {
       this.currentPage = page;
-      this.fetchData(this.currentPage).then(() => {
-        this.paymentsList = this.getPaymentsList;
+    },
+
+    addPayment() {
+      this.$modal.show({
+        title: 'Add new payment',
+        content: 'AddPaymentForm',
+      });
+    },
+
+    addCategory() {
+      this.$modal.show({
+        title: 'Add new category',
+        content: 'AddCategoryForm',
       });
     },
   },
   created() {
     this.currentPage = Number(this.$route.params.page) || 1;
-    this.fetchData(this.currentPage).then(() => {
+    this.fetchData().then(() => {
       this.paymentsList = this.getPaymentsList;
     });
   },

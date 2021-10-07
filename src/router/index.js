@@ -1,9 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Dashboard from '../views/Dashboard.vue';
-import About from '../views/About.vue';
-import NotFound from '../views/NotFound.vue';
-import AddPayment from '../views/AddPayment.vue';
 
 Vue.use(Router);
 
@@ -13,40 +9,46 @@ const router = new Router({
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: Dashboard,
+      component: () =>
+        import(
+          /* webpackChunkName: "PageDashboard" */ '../views/Dashboard.vue'
+        ),
     },
     {
       path: '/dashboard/:page',
       name: 'dashboardWithParams',
-      component: Dashboard,
+      component: () =>
+        import(
+          /* webpackChunkName: "PageDashboard" */ '../views/Dashboard.vue'
+        ),
     },
     {
       path: '/about*',
       name: 'about',
-      component: About,
+      component: () =>
+        import(/* webpackChunkName: "PageAbout" */ '../views/About.vue'),
     },
     {
       path: '/add/payment',
       name: 'addPayment',
-      component: AddPayment,
+      component: () =>
+        import(
+          /* webpackChunkName: "PageAddPayment" */ '../views/AddPayment.vue'
+        ),
     },
     {
       path: '/add/payment/:category',
       name: 'addPaymentWithParams',
-      component: AddPayment,
+      component: () =>
+        import(
+          /* webpackChunkName: "PageAddPayment" */ '../views/AddPayment.vue'
+        ),
     },
     {
       path: '/404',
       name: 'notfound',
-      component: NotFound,
-    },
-    {
-      path: '*',
-      // component: NotFound,
-      // redirect: '/404',
-      redirect: {
-        name: 'notfound',
-      },
+      component: () =>
+        import(/* webpackChunkName: "PageNotFound" */ '../views/NotFound.vue'),
     },
   ],
 });

@@ -21,6 +21,13 @@
       <main>
         <router-view />
       </main>
+      <transition name="fade">
+        <modal-window-add-payment
+          v-if="modalIsShow"
+          :settings="modalSettings"
+        />
+      </transition>
+      <Options v-if="optionsIsShow" :settings="optionsSetting" />
     </div>
   </div>
 </template>
@@ -30,10 +37,50 @@ import './assets/reset.scss';
 
 export default {
   name: 'App',
-  components: {},
-  data: () => ({}),
-  methods: {},
-  mounted() {},
+  data: () => ({
+    modalIsShow: false,
+    modalSettings: {},
+    optionsIsShow: false,
+    optionsSetting: {},
+  }),
+  components: {
+    ModalWindowAddPayment: () =>
+      import(
+        /* webpackChunkName: "ModalComponent" */ './components/ModalWindowAddPayment.vue'
+      ),
+    Options: () =>
+      import(
+        /* webpackChunkName: "OptionsComponent" */ './components/OptionsPayment.vue'
+      ),
+  },
+  methods: {
+    onShow(settings) {
+      this.modalSettings = settings;
+      this.modalIsShow = true;
+    },
+
+    onHide() {
+      this.modalIsShow = false;
+      this.modalSettings = {};
+    },
+
+    onShowOptions(settings) {
+      this.optionsSetting = settings;
+      this.optionsIsShow = true;
+    },
+
+    onHideOptions() {
+      debugger;
+      this.optionsIsShow = false;
+      this.optionsSetting = {};
+    },
+  },
+  mounted() {
+    this.$modal.EventBus.$on('shown', this.onShow);
+    this.$modal.EventBus.$on('hide', this.onHide);
+    this.$optionsPayment.EventBus.$on('showOptions', this.onShowOptions);
+    this.$optionsPayment.EventBus.$on('hideOptions', this.onHideOptions);
+  },
 };
 </script>
 
@@ -69,5 +116,15 @@ export default {
       color: #2c3e50;
     }
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

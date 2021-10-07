@@ -4,7 +4,7 @@
     <a
       class="pagination__link"
       :class="{ active: page === curPage }"
-      v-for="page in pagesCount"
+      v-for="page in generatePages"
       :key="page"
       @click="setPage(page)"
     >
@@ -18,18 +18,23 @@
 export default {
   name: 'Pagination',
   props: {
-    pagesCount: {
-      type: Number,
-    },
     curPage: {
       type: Number,
     },
     count: {
       type: Number,
     },
+    itemsCount: {
+      type: Number,
+    },
   },
   data() {
     return {};
+  },
+  computed: {
+    generatePages() {
+      return Math.ceil(this.itemsCount / this.count);
+    },
   },
   methods: {
     setPage(page) {
