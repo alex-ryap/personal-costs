@@ -22,10 +22,7 @@
         <router-view />
       </main>
       <transition name="fade">
-        <modal-window-add-payment
-          v-if="modalIsShow"
-          :settings="modalSettings"
-        />
+        <ModalWindow v-if="modalIsShow" :settings="modalSettings" />
       </transition>
       <Options v-if="optionsIsShow" :settings="optionsSetting" />
     </div>
@@ -34,6 +31,7 @@
 
 <script>
 import './assets/reset.scss';
+import { mapMutations } from 'vuex';
 
 export default {
   name: 'App',
@@ -44,9 +42,9 @@ export default {
     optionsSetting: {},
   }),
   components: {
-    ModalWindowAddPayment: () =>
+    ModalWindow: () =>
       import(
-        /* webpackChunkName: "ModalComponent" */ './components/ModalWindowAddPayment.vue'
+        /* webpackChunkName: "ModalComponent" */ './components/ModalWindow.vue'
       ),
     Options: () =>
       import(
@@ -54,6 +52,10 @@ export default {
       ),
   },
   methods: {
+    ...mapMutations({
+      removeItem: 'removeItemFromPaymentList',
+    }),
+
     onShow(settings) {
       this.modalSettings = settings;
       this.modalIsShow = true;
@@ -69,8 +71,12 @@ export default {
       this.optionsIsShow = true;
     },
 
+    onRemove(id) {
+      console.log(id);
+      this.removeItem(id);
+    },
+
     onHideOptions() {
-      debugger;
       this.optionsIsShow = false;
       this.optionsSetting = {};
     },
@@ -79,6 +85,7 @@ export default {
     this.$modal.EventBus.$on('shown', this.onShow);
     this.$modal.EventBus.$on('hide', this.onHide);
     this.$optionsPayment.EventBus.$on('showOptions', this.onShowOptions);
+    this.$optionsPayment.EventBus.$on('removeItem', this.onRemove);
     this.$optionsPayment.EventBus.$on('hideOptions', this.onHideOptions);
   },
 };

@@ -10,12 +10,15 @@ export default {
       EventBus: new Vue(),
 
       show(settings) {
-        console.log('showOptions', settings);
         this.EventBus.$emit('showOptions', settings);
       },
 
+      removeItem(id) {
+        console.log(id);
+        this.EventBus.$emit('removeItem', id);
+      },
+
       hide() {
-        console.log('hideOptions');
         this.EventBus.$emit('hideOptions');
       },
     };

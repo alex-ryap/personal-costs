@@ -3,7 +3,7 @@
     <div class="modal__overlay">
       <h2 class="modal__title">{{ settings.title }}</h2>
       <div class="modal__content">
-        <component :is="settings.content" />
+        <component :is="settings.content" :item="settings.item" />
       </div>
       <img class="modal__close" src="../assets/close.svg" @click="onClose" />
     </div>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'ModalWindowAddPayment',
+  name: 'ModalWindow',
   props: {
     settings: {
       type: Object,
@@ -23,9 +23,7 @@ export default {
     AddPaymentForm: () =>
       import(/* webpackChunkName: "AddPaymentForm" */ './AddPaymentForm.vue'),
     AddCategoryForm: () =>
-      import(
-        /* webpackChunkName: "AddCategoryForm" */ './../components/AddCategoryForm.vue'
-      ),
+      import(/* webpackChunkName: "AddCategoryForm" */ './AddCategoryForm.vue'),
   },
   methods: {
     onClose() {

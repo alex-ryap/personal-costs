@@ -13,6 +13,13 @@ export default new Vuex.Store({
       state.paymentsList = payload;
     },
 
+    removeItemFromPaymentList(state, id) {
+      const paymentIndex = state.paymentsList.findIndex(
+        (item) => item.id === id
+      );
+      state.paymentsList.splice(paymentIndex, 1);
+    },
+
     setPaymentsCache(state, page) {
       state.paymentsCache.set(page, state.paymentsList);
     },

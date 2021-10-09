@@ -25,6 +25,11 @@ import { mapMutations, mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'AddPaymentForm',
+  props: {
+    item: {
+      type: Object,
+    },
+  },
   data() {
     return {
       amount: null,
@@ -69,6 +74,10 @@ export default {
     if (!this.categoryList.length) {
       this.fetchCategories();
     }
+
+    this.category = this.item.category || this.category;
+    this.amount = this.item.value || this.amount;
+    this.date = this.item.date || this.date;
   },
   created() {
     this.category = this.$route.params.category || this.category;
