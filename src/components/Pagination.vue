@@ -18,13 +18,13 @@
 export default {
   name: 'Pagination',
   props: {
-    itemsCount: {
-      type: Number,
-    },
     curPage: {
       type: Number,
     },
     count: {
+      type: Number,
+    },
+    itemsCount: {
       type: Number,
     },
   },
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     setPage(page) {
-      if (page < 1 || page > this.generatePages) {
+      if (page < 1 || page > this.pagesCount) {
         return;
       }
       this.$emit('paginate', page);
