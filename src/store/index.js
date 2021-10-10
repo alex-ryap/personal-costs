@@ -20,14 +20,6 @@ export default new Vuex.Store({
       state.paymentsList.splice(paymentIndex, 1);
     },
 
-    setPaymentsCache(state, page) {
-      state.paymentsCache.set(page, state.paymentsList);
-    },
-
-    setPagesCount(state, count) {
-      state.pagesCount = count;
-    },
-
     addDataToPaymentsList(state, payload) {
       state.paymentsList.push(payload);
     },

@@ -1,6 +1,6 @@
 <template>
   <form class="payment__form" @submit.prevent="save">
-    <select class="payment__input" v-model="category">
+    <select class="payment__input" v-model="category" name="category">
       <option
         v-for="category in categoryList"
         :key="category"
@@ -13,9 +13,15 @@
       class="payment__input"
       placeholder="Payment amount"
       type="number"
+      name="amount"
       v-model.number="amount"
     />
-    <input class="payment__input" placeholder="Payment date" v-model="date" />
+    <input
+      class="payment__input"
+      name="date"
+      placeholder="Payment date"
+      v-model="date"
+    />
     <button class="btn payment__btn" type="submit">Add</button>
   </form>
 </template>

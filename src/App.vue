@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import './assets/reset.scss';
+// import './assets/reset.scss';
 import { mapMutations } from 'vuex';
 
 export default {

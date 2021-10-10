@@ -1,6 +1,11 @@
 <template>
   <form class="category__form" @submit.prevent="save">
-    <input class="category__input" placeholder="Category" v-model="category" />
+    <input
+      class="category__input"
+      placeholder="Category"
+      v-model="category"
+      name="category"
+    />
     <button class="btn category__btn" type="submit">Add</button>
   </form>
 </template>
