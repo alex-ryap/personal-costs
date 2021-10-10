@@ -1,23 +1,41 @@
 <template>
   <form class="payment__form" @submit.prevent="save">
-    <input
-      class="payment__input"
-      placeholder="Payment category"
-      v-model="category"
-    />
+    <select class="payment__input" v-model="category" name="category">
+      <option
+        v-for="category in categoryList"
+        :key="category"
+        :value="category"
+      >
+        {{ category }}
+      </option>
+    </select>
     <input
       class="payment__input"
       placeholder="Payment amount"
-      v-model="amount"
+      type="number"
+      name="amount"
+      v-model.number="amount"
     />
-    <input class="payment__input" placeholder="Payment date" v-model="date" />
+    <input
+      class="payment__input"
+      name="date"
+      placeholder="Payment date"
+      v-model="date"
+    />
     <button class="btn payment__btn" type="submit">Add</button>
   </form>
 </template>
 
 <script>
+import { mapMutations, mapGetters, mapActions } from 'vuex';
+
 export default {
   name: 'AddPaymentForm',
+  props: {
+    item: {
+      type: Object,
+    },
+  },
   data() {
     return {
       amount: null,
@@ -26,6 +44,11 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      paymentsCount: 'getPaymentsListCount',
+      categoryList: 'getCategoryList',
+    }),
+
     getCurrentDate() {
       const today = new Date();
       let day = today.getDate();
@@ -38,15 +61,34 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(['addDataToPaymentsList']),
+
+    ...mapActions(['fetchCategories']),
+
     save() {
       const payment = {
+        id: this.paymentsCount + 1,
         date: this.date || this.getCurrentDate,
         category: this.category,
         value: this.amount,
       };
 
-      this.$emit('addNewPayment', payment);
+      this.addDataToPaymentsList(payment);
     },
+  },
+  mounted() {
+    if (!this.categoryList.length) {
+      this.fetchCategories();
+    }
+
+    this.category = this.item.category || this.category;
+    this.amount = this.item.value || this.amount;
+    this.date = this.item.date || this.date;
+  },
+  created() {
+    this.category = this.$route.params.category || this.category;
+    this.amount = this.$route.query.value || this.amount;
+    this.date = this.getCurrentDate;
   },
 };
 </script>

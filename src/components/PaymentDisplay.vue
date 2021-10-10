@@ -7,19 +7,19 @@
       <th>Value</th>
     </thead>
     <tbody>
-      <tr class="table__string" v-for="(item, idx) in items" :key="idx">
-        <td>{{ item.id }}</td>
-        <td>{{ item.date }}</td>
-        <td>{{ item.category }}</td>
-        <td>{{ item.value }}</td>
-      </tr>
+      <PaymentItem v-for="item in items" :key="item.id" :item="item" />
     </tbody>
   </table>
 </template>
 
 <script>
+import PaymentItem from './PaymentItem.vue';
+
 export default {
   name: 'PaymentDisplay',
+  components: {
+    PaymentItem,
+  },
   props: {
     items: {
       type: Array,
