@@ -29,26 +29,16 @@ const router = new Router({
         import(/* webpackChunkName: "PageAbout" */ '../views/About.vue'),
     },
     {
-      path: '/add/payment',
-      name: 'addPayment',
-      component: () =>
-        import(
-          /* webpackChunkName: "PageAddPayment" */ '../views/AddPayment.vue'
-        ),
-    },
-    {
-      path: '/add/payment/:category',
-      name: 'addPaymentWithParams',
-      component: () =>
-        import(
-          /* webpackChunkName: "PageAddPayment" */ '../views/AddPayment.vue'
-        ),
-    },
-    {
       path: '/404',
       name: 'notfound',
       component: () =>
         import(/* webpackChunkName: "PageNotFound" */ '../views/NotFound.vue'),
+    },
+    {
+      path: '*',
+      redirect: {
+        name: 'notfound',
+      },
     },
   ],
 });

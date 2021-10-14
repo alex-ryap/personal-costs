@@ -1,84 +1,44 @@
 <template>
-  <div class="dashboard">
-    <h1 class="title">My personal costs</h1>
-    <div class="content">
-      <div class="buttons">
-        <button class="btn content__btn" @click="addPayment">
-          Add new cost
-        </button>
-        <button class="btn content__btn" @click="addCategory">
-          Add new category
-        </button>
-      </div>
-      Total payments: {{ totalPayments }}
-      <PaymentDisplay :items="displayedPayments" />
-      <Pagination
-        :curPage="currentPage"
-        :count="paymentsCountOfPage"
-        :itemsCount="paymentsList.length"
-        @paginate="setPage"
-      />
-    </div>
-  </div>
+  <v-container>
+    <v-row>
+      <div class="text-h5 text-sm-h3 my-8">My personal costs</div>
+    </v-row>
+    <v-row>
+      <PaymentDisplay :items="paymentsList" :categories="categoryList" />
+      <v-col></v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import PaymentDisplay from './../components/PaymentDisplay.vue';
-import Pagination from './../components/Pagination.vue';
-import { mapMutations, mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'Dashboard',
   components: {
     PaymentDisplay,
-    Pagination,
   },
   data: () => ({
     paymentsList: [],
-    currentPage: 1,
-    paymentsCountOfPage: 10,
+    categoryList: [],
   }),
   computed: {
     ...mapGetters({
-      totalPayments: 'getFullPaymentsValue',
       getPaymentsList: 'getPaymentsList',
+      getCategoryList: 'getCategoryList',
     }),
-    displayedPayments() {
-      return this.paymentsList.slice(
-        this.currentPage * this.paymentsCountOfPage - this.paymentsCountOfPage,
-        this.currentPage * this.paymentsCountOfPage
-      );
-    },
   },
   methods: {
-    ...mapMutations({
-      loadPayments: 'setPaymentsList',
-    }),
-
-    ...mapActions(['fetchData']),
-
-    setPage(page) {
-      this.currentPage = page;
-    },
-
-    addPayment() {
-      this.$modal.show({
-        title: 'Add new payment',
-        content: 'AddPaymentForm',
-      });
-    },
-
-    addCategory() {
-      this.$modal.show({
-        title: 'Add new category',
-        content: 'AddCategoryForm',
-      });
-    },
+    ...mapActions(['fetchData', 'fetchCategories']),
   },
   created() {
-    this.currentPage = Number(this.$route.params.page) || 1;
     this.fetchData().then(() => {
       this.paymentsList = this.getPaymentsList;
+    });
+
+    this.fetchCategories().then(() => {
+      this.categoryList = this.getCategoryList;
     });
   },
 };
