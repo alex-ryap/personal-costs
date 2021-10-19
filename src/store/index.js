@@ -23,11 +23,7 @@ export default new Vuex.Store({
     },
 
     setCategoryList(state, payload) {
-      if (!Array.isArray(payload)) {
-        payload = [payload];
-      }
-
-      state.categoryList.push(...payload);
+      state.categoryList = payload;
     },
 
     editItem(state, payload) {
@@ -142,7 +138,7 @@ export default new Vuex.Store({
           {
             id: 16,
             date: '20.05.2021',
-            category: 'Healthcara',
+            category: 'Healthcare',
             amount: 942,
           },
           {

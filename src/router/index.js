@@ -7,6 +7,12 @@ const router = new Router({
   mode: 'history',
   routes: [
     {
+      path: '/',
+      redirect: {
+        name: 'dashboard',
+      },
+    },
+    {
       path: '/dashboard',
       name: 'dashboard',
       component: () =>
